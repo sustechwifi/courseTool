@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Courses</title>
+    <link rel="stylesheet" href="style.css"/>
+    <script type="text/javascript" src="/eel.js"></script>
+    <script>
+
+        async function getCourses(kind,flag,day,time,target){
+            const res = await eel.test1(day,time,kind,flag)();
+            target.innerHTML = `` + res;
+        }
+
+       function getInfo(kind = 'all',flag = 'all'){
+            for(let i = 1;i <= 6;i++){
+                for(let j = 1;j <= 11;j+=2){
+                   let cur = "#b"+j+'-'+i
+                   const target = document.querySelector(cur);
+                   getCourses(kind,flag,i,j,target);
+                }
+            }
+        }
+
+        window.onload = getInfo();
+
+        let kind = 'all'; //通识必修选课
+        let flag = 'all'; //专业必修或选修
+
+        function changeType(){
+            kind = document.querySelector("#courseType").value;
+            getInfo(kind,flag);
+        }
+
+        function changeFlag(){
+            flag = document.querySelector("#courseFlag").value;
+            //console.log(flag);
+            getInfo(kind,flag);
+        }
+
+        async function changeSelectCourses(){
+            selectedCourses = document.querySelector("#selectCourses").value;
+            let res = await eel.test2(selectedCourses)();
+            let arr = res.date
+            let courses = res.valid
+            let str = '';
+            for(let i = 0;i < courses.length;i++){
+                str += courses[i] + '\n';
+            }
+            document.querySelector("#validCourses").value = str;
+             for(let i = 1;i <= 6;i++){
+                for(let j = 1;j<= 12;j+=2){
+                   let cur = "#b"+j+'-'+i
+                   const target = document.querySelector(cur);
+                   if (arr[i][j] === 1)
+                        target.style.background = '#FA8072';
+                   else
+                        target.style.background = '';
+                }
+            }
+        }
+
+        async function confirmCourses(){
+            flag = document.querySelector("#confirmCourses").value;
+            let res = await eel.add_courses(flag)();
+            console.log(res)
+        }
+
+        async function removeCourses(){
+            flag = document.querySelector("#removeCourses").value;
+            let res = await eel.remove_courses(flag)();
+            console.log(res)
+        }
+
+
+    </script>
+</head>
+<body>
+<hr>
+
+<div>
+    <b>课程类型</b>
+    <!-- 下拉列表 -->
+    <select name="type" onchange="changeType()" id="courseType">
+        <option value="bxxk">通识必修选课</option>
+        <option value="xxxk">通识选修选课</option>
+        <option value="kzyxk">培养方案内课程</option>
+        <option value="zynknjxk">非培养方案内课程</option>
+        <option value="all" selected>全部</option>
+    </select>
+    <select name="type" onchange="changeFlag()" id="courseFlag">
+        <option value="GR">通识必修</option>
+        <option value="EC">通识选修任选</option>
+        <option value="GE-GE">通识选修</option>
+        <option value="MR">专业必修</option>
+        <option value="ME">专业选修</option>
+        <option value="all" selected>全部</option>
+    </select>
+    <table class=table11_3>
+        <tr>
+            <th>星期</th>
+            <th>星期一</th>
+            <th>星期二</th>
+            <th>星期三</th>
+            <th>星期四</th>
+            <th>星期五</th>
+            <th>星期六</th>
+        </tr>
+        <tr class="d1">
+            <td><h3>1-2节</h3></td>
+            <td>
+                <pre id="b1-1"></pre>
+            </td>
+            <td>
+                <pre id="b1-2"></pre>
+            </td>
+            <td>
+                <pre id="b1-3"></pre>
+            </td>
+            <td>
+                <pre id="b1-4"></pre>
+            </td>
+            <td>
+                <pre id="b1-5"></pre>
+            </td>
+            <td>
+                <pre id="b1-6"></pre>
+            </td>
+        </tr>
+        <tr class="d2">
+            <td><h3>3-4节</h3></td>
+            <td>
+                <pre id="b3-1"></pre>
+            </td>
+            <td>
+                <pre id="b3-2"></pre>
+            </td>
+            <td>
+                <pre id="b3-3"></pre>
+            </td>
+            <td>
+                <pre id="b3-4"></pre>
+            </td>
+            <td>
+                <pre id="b3-5"></pre>
+            </td>
+            <td>
+                <pre id="b3-6"></pre>
+            </td>
+        </tr>
+        <tr class="d3">
+            <td><h3>5-6节</h3></td>
+            <td>
+                <pre id="b5-1"></pre>
+            </td>
+            <td>
+                <pre id="b5-2"></pre>
+            </td>
+            <td>
+                <pre id="b5-3"></pre>
+            </td>
+            <td>
+                <pre id="b5-4"></pre>
+            </td>
+            <td>
+                <pre id="b5-5"></pre>
+            </td>
+            <td>
+                <pre id="b5-6"></pre>
+            </td>
+        </tr>
+        <tr class="d4">
+            <td><h3>7-8节</h3></td>
+            <td>
+                <pre id="b7-1"></pre>
+            </td>
+            <td>
+                <pre id="b7-2"></pre>
+            </td>
+            <td>
+                <pre id="b7-3"></pre>
+            </td>
+            <td>
+                <pre id="b7-4"></pre>
+            </td>
+            <td>
+                <pre id="b7-5"></pre>
+            </td>
+            <td>
+                <pre id="b7-6"></pre>
+            </td>
+        </tr>
+        <tr class="d5">
+            <td><h3>9-10节</h3></td>
+            <td>
+                <pre id="b9-1"></pre>
+            </td>
+            <td>
+                <pre id="b9-2"></pre>
+            </td>
+            <td>
+                <pre id="b9-3"></pre>
+            </td>
+            <td>
+                <pre id="b9-4"></pre>
+            </td>
+            <td>
+                <pre id="b9-5"></pre>
+            </td>
+            <td>
+                <pre id="b9-6"></pre>
+            </td>
+        </tr>
+        <tr class="d6">
+            <td><h3>11-12节</h3></td>
+            <td>
+                <pre id="b11-1"></pre>
+            </td>
+            <td>
+                <pre id="b11-2"></pre>
+            </td>
+            <td>
+                <pre id="b11-3"></pre>
+            </td>
+            <td>
+                <pre id="b11-4"></pre>
+            </td>
+            <td>
+                <pre id="b11-5"></pre>
+            </td>
+            <td>
+                <pre id="b11-6"></pre>
+            </td>
+        </tr>
+    </table>
+</div>
+<hr>
+<textarea style="width:30%;height:200px" id="selectCourses"></textarea>
+<textarea style="width:30%;height:200px" id="validCourses"></textarea>
+<button onclick="changeSelectCourses()">refresh</button>
+<br>
+<hr>
+<textarea style="width:30%;height:200px" id="confirmCourses"></textarea>
+<button onclick="confirmCourses()">确认选课</button>
+<textarea style="width:30%;height:200px" id="removeCourses"></textarea>
+<button onclick="removeCourses()">确认退课</button>
+</body>
+</html>
